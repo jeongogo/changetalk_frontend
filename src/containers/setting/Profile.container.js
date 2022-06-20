@@ -10,16 +10,20 @@ const ProfileContainer = () => {
   const currentUser = useStore((state) => state.user);
   const setUser = useStore((state) => state.setUser);
 
-  const handleProfileSave = async (values) => {
-    const { data } = await axios.post(`/api/auth/${currentUser._id}`, {
-      username: values.username,
-      stateMessage: values.stateMessage
-    });
-
-    if (data) {
+  const handleProfileSave = async (user) => {
+    try {
+      if (user.avatarImage[0]) {
+        const formData = new FormData();
+        formData.append("image", user.avatarImage[0]);
+  
+        const res = await axios.post('/api/auth/profile/upload', formData);
+        user.avatarImage = res.data.image;
+      }
+      const { data } = await axios.post(`/api/auth/${currentUser._id}`, user);
       setUser(data);
-      navigate('/setting');
-    }    
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   return (

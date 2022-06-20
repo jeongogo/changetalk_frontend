@@ -5,7 +5,12 @@ const Avatar = ({ user, isChat, messages }) => {
   return (
     <Container>
       <div className='avatar'>
-        <img src="../avatar_default.jpg" alt="" />
+        {user.avatarImage
+          ?
+          <img src={user.avatarImage} alt="" />
+          :
+          <img src="../avatar_default.jpg" alt="" />
+        }
       </div>
       <div className="info">
         <div className='name'>{user.username}</div>

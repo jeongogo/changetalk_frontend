@@ -14,7 +14,10 @@ const FriendListContainer = () => {
     return data;
   }
 
-  const { isLoading, data, error } = useQuery("friendsQuery", getFriends);
+  const { isLoading, data, error } = useQuery("friendsQuery", getFriends, {
+    staleTime: 5000,
+    cacheTime: Infinity,
+  });
 
   if (isLoading) {
     return <Loader position='full' />;

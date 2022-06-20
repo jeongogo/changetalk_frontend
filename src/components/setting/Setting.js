@@ -19,7 +19,12 @@ const Setting = () => {
         <li>
           <div className="user">
             <div className='avatar'>
-              <img src="../avatar_default.jpg" alt="" />
+              {currentUser.avatarImage
+                ?
+                <img src={currentUser.avatarImage} alt="" />
+                :
+                <img src="../avatar_default.jpg" alt="" />
+              }
             </div>
             <div className="info">
               <div className="name">

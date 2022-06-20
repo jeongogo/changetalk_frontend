@@ -1,31 +1,35 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from "react-hook-form";
 import styled from 'styled-components';
 
 const Profile = ({ currentUser, handleProfileSave }) => {
-  const [values, setValues] = useState({
-    userid: currentUser.userid,
-    username: currentUser.username,
-    stateMessage: currentUser.stateMessage || '',
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      userid: currentUser.userid,
+      username: currentUser.username,
+      stateMessage: currentUser.stateMessage,
+      avatarImage: currentUser.avatarImage,
+    }
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleProfileSave(values);
-  }
-
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+  const onSubmit = (data) => {
+    handleProfileSave(data);
   };
 
   return (
     <Container>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="input-box">
           <div className='wrap'>
             <label>아이디</label>
             <input
               type="text"
-              value={values.userid}
+              {...register("userid")}
               disabled
             />
           </div>
@@ -33,8 +37,7 @@ const Profile = ({ currentUser, handleProfileSave }) => {
             <label>이름</label>
             <input
               type="text"
-              name='username'
-              value={values.username}
+              {...register("username")}
               disabled
             />
           </div>
@@ -42,11 +45,21 @@ const Profile = ({ currentUser, handleProfileSave }) => {
             <label>상태메세지</label>
             <input
               type="text"
-              name='stateMessage'
-              value={values.stateMessage}
-              onChange={(e) => handleChange(e)}
-              autoComplete='off'
+              {...register("stateMessage")}
             />
+          </div>
+          <div className="wrap image">
+            <label>프로필 이미지</label>
+            {!watch("avatarImage") || watch("avatarImage").length === 0 ? (
+              <div>
+                <input type="file" className="w-full" {...register("avatarImage")} />
+              </div>
+            ) : (
+              <div>
+                <img src={`/${currentUser.avatarImage}`} alt="" />
+                <input type="file" className="w-full" {...register("avatarImage")} />
+              </div>
+            )}
           </div>
         </div>
         <div className='btn'>
@@ -65,8 +78,15 @@ const Container = styled.div`
         display: flex;
         align-items: center;
         margin-bottom: 0.7rem;
+        &.image {
+          div {
+            img {
+              max-width: 50vw;
+            }
+          }
+        }
         label {
-          width: 5rem;
+          width: 7rem;
           flex-shrink: 0;
         }
         input {
