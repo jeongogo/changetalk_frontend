@@ -66,17 +66,15 @@ const Container = styled.div`
         display: flex;
         align-items: center;
         .avatar {
-          position: relative;
           width: 3rem;
           height: 3rem;
           margin-right: 0.7rem;
           border-radius: 50%;
           overflow: hidden;
           img {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
+            height: 100%;
+            object-fit: cover;
           }
         }
         .info {

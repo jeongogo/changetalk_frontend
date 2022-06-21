@@ -29,6 +29,7 @@ const Search = ({ currentUser, users, handleSearch, handleAddFriend }) => {
             onKeyPress={(e) => {
               e.key === "Enter" && handleSubmit(e);
             }}
+            placeholder='이름으로 검색'
           />
           <button type='submit'>
             <FiSearch />

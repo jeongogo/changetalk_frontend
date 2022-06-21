@@ -79,23 +79,33 @@ const Chat = ({ isLoading, currentUser, chatUser, getMoreMessage, handleSendMess
         :
         <>
           {messageList && messageList.map((message) => (
-            <div key={message.messageId} className={`message ${message.from === currentUser._id ? 'me' : ''}`}>
-              <div className='name'>
-                {message.from === currentUser._id ? currentUser.username : chatUser.username} :
+            <div key={message.messageId} className={`message-list ${message.from === currentUser._id ? 'me' : ''}`}>
+              <div className='avatar'>
+                {chatUser.avatarImage
+                  ?
+                  <img src={chatUser.avatarImage} alt="" />
+                  :
+                  <img src="../avatar_default.jpg" alt="" />
+                }
               </div>
-              <div className='content'>
-                {message.content}
-              </div>
-              {format(new Date(), 'yyyy.MM.dd') === format(new Date(message.sendDate), 'yyyy.MM.dd')
-                ?
+              <div className="content">
+                <div className='name'>
+                  {chatUser.username}
+                </div>
+                <div className='message'>
+                  {message.content}
+                </div>
+                {format(new Date(), 'yyyy.MM.dd') === format(new Date(message.sendDate), 'yyyy.MM.dd')
+                  ?
                   <div className="date">
                     {format(new Date(message.sendDate), 'HH:mm:ss')}
                   </div>
-                :
+                  :
                   <div className="date">
-                    {format(new Date(message.sendDate), 'yyyy.MM.dd HH:mm:ss')}
+                    {format(new Date(message.sendDate), 'yy.MM.dd HH:mm:ss')}
                   </div>
-              }
+                }
+              </div>
             </div>
           ))}
         </>
@@ -166,41 +176,65 @@ const Container = styled.div`
     &::-webkit-scrollbar-track {
       background-color: transparent;
     }
-    .message {
+    .message-list {
       display: flex;
-      align-items: center;
-      margin-bottom: 0.6rem;
+      margin-bottom: 0.8rem;
       &.me {
         justify-content: flex-end;
-        .name {
+        .avatar {
           display: none;
         }
         .content {
-          order: 2;
-          margin-left: 0.4rem;
-          background-color: #ffeb33;
-          border-radius: 0.3rem 0 0.3rem 0.3rem;
-        }
-        .date {
-          order: 1;
+          .name {
+            display: none;
+          }
+          .message {
+            order: 2;
+            margin-left: 0.4rem;
+            background-color: #ffeb33;
+            border-radius: 0.3rem 0 0.3rem 0.3rem;
+          }
+          .date {
+            order: 1;
+          }
         }
       }
-      .name {
-        font-size: 0.8rem;
+      .avatar {
+        position: relative;
+        width: 2.5rem;
+        height: 2.5rem;
+        margin-right: 0.7rem;
+        border-radius: 50%;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
       .content {
-        margin-left: 0.5rem;
-        margin-right: 0.3rem;
-        padding: 0.4rem 0.8rem 0.5rem 0.6rem;
-        font-size: 0.8rem;
-        background-color: #fff;
-        border-radius: 0 0.3rem 0.3rem 0.3rem;
-        box-shadow: 1px 1px 2px rgba(0,0,0,0.05);
-      }
-      .date {
-        margin-top: auto;
-        font-size: 0.7rem;
-        font-weight: 300;
+        display: flex;
+        flex-wrap: wrap;
+        .name {
+          width: 100%;
+          margin-bottom: 0.2rem;
+          font-size: 0.8rem;
+        }
+        .message {
+          max-width: 35vw;
+          margin-right: 0.3rem;
+          padding: 0.4rem 0.8rem 0.5rem 0.6rem;
+          font-size: 0.8rem;
+          background-color: #fff;
+          border-radius: 0 0.3rem 0.3rem 0.3rem;
+          box-shadow: 1px 1px 2px rgba(0,0,0,0.05);
+        }
+        .date {
+          margin-top: auto;
+          font-size: 0.7rem;
+          font-weight: 300;
+          opacity: 0.9;
+        }
       }
     }
   }

@@ -61,6 +61,13 @@ input[type='password']:focus::placeholder {
   opacity: 0;
 }
 
+input[type='text']:read-only,
+input[type='text']:disabled,
+input[type='password']:read-only,
+input[type='password']:disabled {
+  background-color: #eee;
+}
+
 textarea {
   font-family: 'Noto Sans KR', sans-serif;
   font-size: inherit;

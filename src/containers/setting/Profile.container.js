@@ -1,14 +1,14 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import axios from 'axios';
 import useStore from '../../modules/store';
 import Header from '../../components/common/Header';
 import Profile from '../../components/setting/Profile';
 
 const ProfileContainer = () => {
-  const navigate = useNavigate();
   const currentUser = useStore((state) => state.user);
   const setUser = useStore((state) => state.setUser);
+  const [successMessage, setSuccessMessage] = useState();
+  const [openAlarm, setOpenAlarm] = useState(false);
 
   const handleProfileSave = async (user) => {
     try {
@@ -18,8 +18,12 @@ const ProfileContainer = () => {
   
         const res = await axios.post('/api/auth/profile/upload', formData);
         user.avatarImage = res.data.image;
+      } else {
+        delete user.avatarImage;
       }
       const { data } = await axios.post(`/api/auth/${currentUser._id}`, user);
+      setOpenAlarm(true);
+      setSuccessMessage('저장 완료되었습니다.');
       setUser(data);
     } catch (err) {
       console.log(err);
@@ -29,7 +33,13 @@ const ProfileContainer = () => {
   return (
     <>
       <Header title='프로필 설정' goBack />
-      <Profile currentUser={currentUser} handleProfileSave={handleProfileSave} />
+      <Profile
+        currentUser={currentUser}
+        handleProfileSave={handleProfileSave}
+        successMessage={successMessage}
+        openAlarm={openAlarm}
+        setOpenAlarm={setOpenAlarm}
+      />
     </>
   );
 }
