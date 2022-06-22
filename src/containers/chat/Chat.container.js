@@ -18,17 +18,25 @@ const ChatContainer = ({ socket }) => {
 
   // 상대 유저 가져오기
   const getUser = async () => {
-    const resUser = await axios.get(`/api/auth/${id}`);
+    const resUser = await axios.get(`/api/auth/${id}`, {
+      headers: { authorization: 'Bearer ' + currentUser.accessToken }
+    });
     setChatUser(resUser.data);
   }
 
   // 채팅방 가져오기
   const getChat = async () => {
-    const { data } = await axios.post('/api/chat/', {
-      currentUserId: currentUser._id,
-      chatUserId: id,
-      count: 'firstGet',
-    });
+    const { data } = await axios.post(
+      '/api/chat/',
+      {
+        currentUserId: currentUser._id,
+        chatUserId: id,
+        count: 'firstGet',
+      },
+      {
+        headers: { authorization: 'Bearer ' + currentUser.accessToken }
+      }
+    );
 
     if (data.state) {
       setIsChat(true);
@@ -56,11 +64,17 @@ const ChatContainer = ({ socket }) => {
       return
     }
 
-    const { data } = await axios.post('/api/chat/', {
-      currentUserId: currentUser._id,
-      chatUserId: id,
-      count: currentCount,
-    });
+    const { data } = await axios.post(
+      '/api/chat/',
+      {
+        currentUserId: currentUser._id,
+        chatUserId: id,
+        count: currentCount,
+      },
+      {
+        headers: { authorization: 'Bearer ' + currentUser.accessToken }
+      }
+    );
 
     if (data) {
       setCurrentCount(data.count);
@@ -78,9 +92,15 @@ const ChatContainer = ({ socket }) => {
   // 메세지 전송
   const handleSendMessage = async (text) => {
     if (!isChat) {
-      const { data } = await axios.post('/api/chat/create', {
-        currentUserId: currentUser._id, chatUserId: id
-      });
+      const { data } = await axios.post(
+        '/api/chat/create',
+        {
+          currentUserId: currentUser._id, chatUserId: id
+        },
+        {
+          headers: { authorization: 'Bearer ' + currentUser.accessToken }
+        }
+      );
       setChatData(data.chat);
       setIsChat(true);
       socket.emit("join_room", data.chat._id);
@@ -99,7 +119,9 @@ const ChatContainer = ({ socket }) => {
       sendDate: new Date(),
     }
 
-    axios.post(`/api/chat/${id}`, messageData);
+    axios.post(`/api/chat/${id}`, messageData, {
+      headers: { authorization: 'Bearer ' + currentUser.accessToken }
+    });
     await socket.emit("send_message", messageData);
     setMessageList((list) => [...list, messageData]);
   }

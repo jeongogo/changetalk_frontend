@@ -16,12 +16,24 @@ const ProfileContainer = () => {
         const formData = new FormData();
         formData.append("image", user.avatarImage[0]);
   
-        const res = await axios.post('/api/auth/profile/upload', formData);
+        const res = await axios.post(
+          '/api/auth/profile/upload',
+          formData,
+          {
+            headers: { authorization: 'Bearer ' + currentUser.accessToken }
+          }
+        );
         user.avatarImage = res.data.image;
       } else {
         delete user.avatarImage;
       }
-      const { data } = await axios.post(`/api/auth/${currentUser._id}`, user);
+      const { data } = await axios.post(
+        `/api/auth/${currentUser._id}`,
+        user,
+        {
+          headers: { authorization: 'Bearer ' + currentUser.accessToken }
+        }
+      );
       setOpenAlarm(true);
       setSuccessMessage('저장 완료되었습니다.');
       setUser(data);

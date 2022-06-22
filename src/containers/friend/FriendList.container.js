@@ -10,7 +10,9 @@ const FriendListContainer = () => {
   const currentUser = useStore((state) => state.user);
 
   const getFriends = async () => {
-    const { data } = await axios.get(`/api/auth/friends/${currentUser._id}`);
+    const { data } = await axios.get(`/api/auth/friends/${currentUser._id}`, {
+      headers: { authorization: 'Bearer ' + currentUser.accessToken }
+    });
     return data;
   }
 

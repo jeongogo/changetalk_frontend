@@ -9,7 +9,13 @@ const UserListContainer = () => {
   const [users, setUsers] = useState([]);
 
   const handleAddFriend = async (id) => {
-    const { data } = await axios.post(`/api/auth/friends/${currentUser._id}`, { id: id });
+    const { data } = await axios.post(
+      `/api/auth/friends/${currentUser._id}`,
+      { id: id },
+      {
+        headers: { authorization: 'Bearer ' + currentUser.accessToken }
+      }
+    );
     const friends = currentUser.friends.concat(id);
     setUser({ ...currentUser, friends: friends });
   }

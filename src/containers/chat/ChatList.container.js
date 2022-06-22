@@ -10,7 +10,9 @@ const ChatListContainer = () => {
   const currentUser = useStore((state) => state.user);
 
   const getChatList = async () => {
-    const { data } = await axios.get(`/api/chat/${currentUser._id}`);
+    const { data } = await axios.get(`/api/chat/${currentUser._id}`, {
+      headers: { authorization: 'Bearer ' + currentUser.accessToken }
+    });
     return data;
   }
 

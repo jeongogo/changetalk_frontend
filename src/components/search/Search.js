@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import Avatar from '../common/Avatar';
-import { FiSearch } from "react-icons/fi";
+import Alarm from '../../components/common/Alarm';
+import { FiSearch, FiUserPlus } from "react-icons/fi";
 
-const Search = ({ currentUser, users, handleSearch, handleAddFriend }) => {
+const Search = ({ currentUser, users, handleSearch, handleAddFriend, successMessage, openAlarm, setOpenAlarm }) => {
   const [text, setText] = useState('');
   const textRef = useRef();
 
@@ -42,13 +43,19 @@ const Search = ({ currentUser, users, handleSearch, handleAddFriend }) => {
           {users && users.map((user) => (
             <li key={user._id}>
               <Avatar user={user} />
-              {!currentUser.friends.includes(user._id) && currentUser._id !== user._id &&
-                <button type='button' onClick={() => handleAdd(user._id)}>친구 추가</button>
-              }
+              <button
+                type='button'
+                className='add-friend'
+                disabled={!currentUser.friends.includes(user._id) && currentUser._id !== user._id ? false : true}
+                onClick={() => handleAdd(user._id)}
+              >
+                <FiUserPlus />
+              </button>
             </li>
           ))}
         </ul>
       </div>
+      {openAlarm && <Alarm text={successMessage} handleClose={setOpenAlarm} />}
     </Container>
   );
 }
@@ -76,12 +83,16 @@ const Container = styled.div`
     }
   }
   .user-list {
+    margin-top: 1rem;
     ul {
       li {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 0.7rem 0;
+        .add-friend {
+          font-size: 1.2rem;
+        }
       }
     }
   }

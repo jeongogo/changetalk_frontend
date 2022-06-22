@@ -2,13 +2,19 @@ import create from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 let store = (set) => ({
-  user: null,
+  user: {
+    email: null,
+    name: null,
+    accessToken: null,
+    refreshToken: null,
+    exp: null
+  },
   setUser: (user) => set(() => ({ user: user })),
-  removeUser: () => set({ user: null })
+  logout: () => set({ user: null })
 });
 
 store = devtools(store);
-store = persist(store, { name: "changetalk-user" });
+store = persist(store, { name: "changetalk_user" });
 
 const useStore = create(store);
 

@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import io from "socket.io-client";
 import useStore from './modules/store';
 import ChatListPage from './pages/chat/ChatList.page';
@@ -15,9 +16,17 @@ const socket = io.connect("http://localhost:4000");
 
 function App() {
   const currentUser = useStore((state) => state.user);
+  const logout = useStore(state => state.logout);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (currentUser?.name && currentUser?.exp < Math.floor(new Date().getTime() / 1000)) {
+      logout();
+    }
+  }, [location]);
 
   return (
-    <BrowserRouter>
+    <>
       {currentUser?.username
         ?
           <Routes>
@@ -37,7 +46,7 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
       }
-    </BrowserRouter>
+    </>
   );
 }
 

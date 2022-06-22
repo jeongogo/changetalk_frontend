@@ -1,83 +1,52 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import styled from 'styled-components';
 
 const Register = ({ handleRegister, error }) => {
-  const [message, setMessage] = useState('');
-  const [values, setValues] = useState({
-    userid: '',
-    username: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const onSubmit = (data) => {
     if (handleValidation()) {
-      handleRegister(values);
+      handleRegister(data);
     }
   }
 
   const handleValidation = () => {
-    const { password, confirmPassword, username, userid } = values;
-    if (password !== confirmPassword) {
-      setMessage('비밀번호가 일치하지 않습니다.');
-      return false;
-    } else if (username === '') {
-      setMessage('이름을 입력해 주세요.');
-      return false;
-    } else if (userid.length < 3) {
-      setMessage('아이디는 4자 이상 입력해 주세요.');
-      return false;
-    } else if (password.length < 8) {
-      setMessage('비밀번호는 8자 이상 입력해 주세요.');
+    if (register.password !== register.confirmPassword) {
+      errors.confirmPassword = true;
       return false;
     }
     return true;
   }
 
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
   return (
     <Container>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <h1>회원가입</h1>
         <input
-          type="text"
-          value={values.userid}
-          name='userid'
-          onChange={(e) => handleChange(e)}
-          autoComplete='off'
-          placeholder='아이디'
+          type="email"
+          placeholder='이메일'
+          {...register("email", { required: true })}
+          required
         />
         <input
           type="text"
-          value={values.username}
-          name='username'
-          onChange={(e) => handleChange(e)}
-          autoComplete='off'
           placeholder='이름'
+          {...register("username", { required: true })}
         />
         <input
           type="password"
-          value={values.password}
-          name='password'
-          onChange={(e) => handleChange(e)}
           placeholder='비밀번호'
+          {...register("password", { required: true, minLength: 8 })}
+          minLength='8'
         />
         <input
           type="password"
-          value={values.confirmPassword}
-          name='confirmPassword'
-          onChange={(e) => handleChange(e)}
           placeholder='비밀번호 확인'
+          {...register("confirmPassword", { required: true, minLength: 8 })}
         />
-        {message && (
-          <div>{message}</div>
-        )}
+        {errors.confirmPassword && <div>비밀번호가 일치하지 않습니다.</div> }
         {error && (
           <div>{error}</div>
         )}

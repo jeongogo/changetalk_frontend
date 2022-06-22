@@ -6,10 +6,10 @@ import styled from 'styled-components';
 const Setting = () => {
   const navigate = useNavigate();
   const currentUser = useStore((state) => state.user);
-  const removeUser = useStore((state) => state.removeUser);
+  const logout = useStore((state) => state.logout);
 
   const handleLogout = () => {
-    removeUser();
+    logout();
     navigate('/login');
   };
 

@@ -13,7 +13,7 @@ const Profile = ({ currentUser, handleProfileSave, successMessage, openAlarm, se
     formState: { errors },
   } = useForm({
     defaultValues: {
-      userid: currentUser.userid,
+      email: currentUser.email,
       username: currentUser.username,
       stateMessage: currentUser.stateMessage,
     }
@@ -45,10 +45,10 @@ const Profile = ({ currentUser, handleProfileSave, successMessage, openAlarm, se
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
         <div className="input-box">
           <div className='wrap'>
-            <label>아이디</label>
+            <label>이메일</label>
             <input
-              type="text"
-              {...register("userid")}
+              type="email"
+              {...register("email")}
               disabled
             />
           </div>

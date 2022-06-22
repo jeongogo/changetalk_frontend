@@ -1,58 +1,29 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import styled from 'styled-components';
 
 const Login = ({ handleLogin, error }) => {
-  const [message, setMessage] = useState('');
-  const [values, setValues] = useState({
-    userid: '',
-    password: '',
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (handleValidation()) {
-      handleLogin(values);
-    }
+  const onSubmit = (data) => {
+    handleLogin(data);
   }
-
-  const handleValidation = () => {
-    const { password, userid } = values;
-    if (userid.length === '') {
-      setMessage('아이디를 입력해 주세요.');
-      return false;
-    } else if (password.length === '') {
-      setMessage('비밀번호를 입력해 주세요.');
-      return false;
-    }
-    return true;
-  }
-
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
 
   return (
     <Container>
-      <form onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <h1>로그인</h1>
         <input
-          type="text"
-          name='userid'
-          onChange={(e) => handleChange(e)}
-          autoComplete='off'
-          placeholder='아이디'
+          type="email"
+          {...register("email", { required: true })}
+          placeholder='이메일'
         />
         <input
           type="password"
-          name='password'
-          onChange={(e) => handleChange(e)}
+          {...register("password", { required: true, minLength: 8 })}
           placeholder='비밀번호'
         />
-          {message && (
-            <div>{message}</div>
-          )}
           {error && (
             <div>{error}</div>
           )}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import jwt_decode from "jwt-decode";
 import useStore from "../../modules/store";
 import Login from '../../components/auth/Login';
 
@@ -10,16 +11,20 @@ const LoginContainer = () => {
   const setUser = useStore((state) => state.setUser);
 
   const handleLogin = async (values) => {
-    const { password, userid } = values;
+    const { password, email } = values;
     const { data } = await axios.post('/api/auth/login', {
-      userid,
+      email,
       password,
     });
     if (data.status === false) {
       setError(data.msg);
     }
     if (data.status === true) {
-      setUser(data.user);
+      let user = data.user;
+      const decoded = jwt_decode(data.token);
+      user.accessToken = data.token;
+      user.exp = decoded.exp;
+      setUser(user);
       navigate('/');
     }
   }
