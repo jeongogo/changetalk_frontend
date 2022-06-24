@@ -20,7 +20,7 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if (currentUser?.name && currentUser?.exp < Math.floor(new Date().getTime() / 1000)) {
+    if (currentUser?.username && currentUser?.exp < Math.floor(new Date().getTime() / 1000)) {
       logout();
     }
   }, [location]);

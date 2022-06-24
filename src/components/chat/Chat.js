@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { debounce } from "lodash";
 import styled from 'styled-components';
 import { format } from 'date-fns';
-import { FiChevronLeft, FiMoreVertical } from "react-icons/fi";
+import { FiChevronLeft, FiMoreVertical, FiPhoneCall } from "react-icons/fi";
 import { MdSend } from "react-icons/md";
 import Loader from '../common/Loader';
 
-const Chat = ({ isLoading, currentUser, chatUser, getMoreMessage, handleSendMessage, handleClose, messageList }) => {
+const Chat = ({ isLoading, currentUser, chatUser, getMoreMessage, handleSendMessage, handleClose, messageList, handleCall }) => {
   const [text, setText] = useState('');
   const [autoScrollBottom, setAutoScrollBottom] = useState(true);
   const textRef = useRef();
@@ -68,6 +68,9 @@ const Chat = ({ isLoading, currentUser, chatUser, getMoreMessage, handleSendMess
           <FiChevronLeft />
         </button>
         <div className="name">{chatUser.username}</div>
+        <button className='call-btn' onClick={handleCall}>
+          <FiPhoneCall />
+        </button>
         <button type='button' className='more-btn'>
           <FiMoreVertical />
         </button>
@@ -143,10 +146,15 @@ const Container = styled.div`
     height: 3rem;
     padding: 0 0.7rem;
     font-weight: bold;
-    background-color: #a9bdce;
+    background-color: #fff;
     button {
       &.prev-btn {
         font-size: 1.2rem;
+        line-height: 0;
+      }
+      &.call-btn {
+        margin-right: 1rem;
+        font-size: 1rem;
         line-height: 0;
       }
       &.more-btn {
@@ -163,7 +171,7 @@ const Container = styled.div`
   .message-box {
     height: calc(100vh - 8rem);
     padding-bottom: 2px;
-    background-color: #b2c7d9;
+    background-color: #eaecf2;
     padding: 1rem 0.5rem 0.5rem 1rem;
     overflow-y: auto;
     &::-webkit-scrollbar {
@@ -171,7 +179,7 @@ const Container = styled.div`
       border-radius: 4px;
     }
     &::-webkit-scrollbar-thumb {
-      background-color: #8b9aa6;
+      background-color: #c2c6d2;
     }
     &::-webkit-scrollbar-track {
       background-color: transparent;

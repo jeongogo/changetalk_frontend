@@ -10,10 +10,14 @@ const FriendList = ({ friends }) => {
     navigate(`/chat/${id}`);
   };
 
+  if (!friends) {
+    return;
+  }
+
   return (
     <Container>
       <ul>
-        {friends && (
+        {friends.length > 0 && (
           friends.map((friend) => (
             <li key={friend._id} onDoubleClick={() => handleChat(friend._id)}>
               <Avatar user={friend} />
