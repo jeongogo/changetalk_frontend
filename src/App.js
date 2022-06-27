@@ -12,7 +12,7 @@ import SearchPage from './pages/search/Search.page';
 import SettingPage from './pages/setting/Setting.page';
 import ProfilePage from './pages/setting/Profile.page';
 
-const socket = io.connect("http://localhost:4000");
+const socket = io.connect();
 
 function App() {
   const currentUser = useStore((state) => state.user);
